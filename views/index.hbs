@@ -1,0 +1,35 @@
+<h2>Todos Lab</h2>
+{{#if User}}
+<h4>Hi, {{User.email}}</h4>
+{{#if todos.length}}
+<ul>
+{{#each todos}}
+    <li class="todo">
+        <form action="/delete" method="POST"> 
+            <label>
+                {{#if completed}}
+                    <input id="compl" type="checkbox" checked>
+                    <span class="comleted"><a href="read/{{id}}">{{name}}</a></span>
+                {{else}}
+                    
+                    <input id="compl" type="checkbox" onclick="function({{id}}) {
+                        const todo = Todo.findById({{id}})
+                        console.log(todo + 'hi')
+                        todo.completed = true
+                    }">
+                    <span><a href="read/{{id}}">{{name}}</a></span>
+                {{/if}}
+                <input type="hidden" value="{{id}}" name="id">
+                    
+                <button class="btn btn-small" type="submit">Delete</button>
+            </label>
+        </form>
+    </li>
+{{/each}}
+</ul>
+    
+{{else}}
+    <p>No Todos!</p>
+{{/if}}
+{{/if}}
+

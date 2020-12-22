@@ -1,0 +1,17 @@
+    <h2>Read operation</h2>
+    <div class="row">
+        <div class="input-field col s12">
+          {{#if result}}
+            {{#if result.completed}}
+              <div class="input-field col s12" style="background-color: #90EE90;">
+                <p>Your todo: {{result.name}}</p>
+                <p>Description: {{result.description}}</p>
+              {{else}}
+                <div class="input-field col s12" style="background-color: #FA8072;">
+                <p>Your todo: {{result.name}}</p>
+                <p>Description: {{result.description}}</p>
+              {{/if}}
+          </div>
+          {{/if}}
+        </div>
+    </div>

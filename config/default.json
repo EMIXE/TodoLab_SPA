@@ -1,0 +1,6 @@
+{
+    "port": 5000,
+    "jwtSecret": "lab 5 and 6 web",
+    "baseUrl": "http://localhost:5000",
+    "mongoUri": "mongodb+srv://Artyom:30041969n@cluster0.atbrl.mongodb.net/WEB_Lab_0"
+}
