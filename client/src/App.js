@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react'
+import React from 'react'
 import {useRoutes} from './routes'
 import 'materialize-css'
 import {BrowserRouter as Router} from 'react-router-dom'

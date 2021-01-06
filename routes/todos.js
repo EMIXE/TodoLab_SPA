@@ -59,13 +59,20 @@ router.post('/create', auth, async (req, res) => {
 
 })
 
+// api/todos/delete
 router.post('/delete', auth, async (req,res) => {
-    console.log('yees')
-    const {id} = req.body
+    const id = req.body.id
+    const user = req.user.userId
+    console.log(req.user)
     console.log(id)
-    const todo = await Todo.findByIdAndRemove(id)
-    console.log('compls')
-    
+    const todo = await Todo.findById(id)
+    if(todo.user === user) {
+        const f = await Todo.remove({_id: id})
+        console.log('good')
+        res.end()
+    } else {
+        res.status(403).json('Не имеете права')
+    }
 })
 
 router.get('/:id', auth, async (req,res) => {
