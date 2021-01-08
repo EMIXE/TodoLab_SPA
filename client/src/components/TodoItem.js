@@ -1,11 +1,13 @@
-import React, {useContext, useEffect, useState} from 'react'
+import React, {useContext, useEffect, useState, useCallback} from 'react'
 import {useHttp} from '../hooks/http.hook'
 import { AuthContext } from '../context/AuthContext'
 import {Link} from 'react-router-dom'
 
-export const TodoItem = ({todo, index})  => {
+export const TodoItem = ({todo, index, deleteHandler})  => {
     const {request} = useHttp()
     const auth = useContext(AuthContext)
+
+    const [td, setTd] = useState(todo)
 
     const styles = {
         li: {
@@ -23,38 +25,20 @@ export const TodoItem = ({todo, index})  => {
       }
 
 
-    const deleteHandler = async event => {
-        try {
-            console.log(todo.id)
-            const data = await request('/api/todos/delete', 'POST', {id: todo._id}, {
-                Authorization: `Bearer ${auth.token}`
-          })
-
-            console.log('post completed')
-        } catch(e) {}
-        }
+      
         
 
         return (
             <li style={styles.li}>
-              <span //className={classes.join(' ')}
-              >
-                <input
-                  type="checkbox"
-                  checked={todo.completed}
-                  style={styles.input}
-                  //onChange={() => onChange(todo.id)}
-                />
-                <strong>{index + 1}</strong>
+              <p>
+                <label>
+                  <input type="checkbox" />
+                  <span><Link to={`/detail/${td._id}`}>{td.name}</Link></span>
+                </label>
+              </p>
                 &nbsp;
-                <span><Link to={`/detail/${todo._id}`}>{todo.name}</Link></span>
-              </span>
-        
-              <button className='rm' 
-              onClick={deleteHandler}
-              >
-                &times;
-              </button>
+              <button className="waves-effect waves-light btn-small" 
+                onClick={() => deleteHandler(td._id)}>Удалить</button>
             </li>
           )
 }

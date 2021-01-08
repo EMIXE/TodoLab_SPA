@@ -68,7 +68,7 @@ router.post('/delete', auth, async (req,res) => {
     const todo = await Todo.findById(id)
     if(todo.user === user) {
         const f = await Todo.remove({_id: id})
-        console.log('good')
+        todo.save()
         res.end()
     } else {
         res.status(403).json('Не имеете права')

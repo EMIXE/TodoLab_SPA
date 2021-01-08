@@ -8,7 +8,7 @@ export const TodosList = ({todos}) => {
     //const {request} = useHttp()
     const auth = useContext(AuthContext)
     //const [todo, setTodo] = useState({todos})
-
+    console.log(todos)
    
     const styles = {
         ul: {
@@ -28,7 +28,7 @@ export const TodosList = ({todos}) => {
             <ul style={styles}>
             {todos.map((todo, index)=> { 
                 return(
-                    <TodoItem todo={todo} key={todo.id} index={index}/>
+                    <TodoItem todo={todo} key={todo.id} index={index} />
                 )})}
             </ul>
         </div>

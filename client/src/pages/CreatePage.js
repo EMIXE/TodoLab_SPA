@@ -27,7 +27,7 @@ export const CreatePage = () => {
     return (
         <div className ="row">
              <div className="col s8 offset-s2" style={{paddingTop: '2rem'}}>
-                <h1>CreatePage</h1>
+                <h1>Create Todo</h1>
                 <div className="input-field">
                     <input placeholder="Введите название" 
                     id="todo" type="text" 
