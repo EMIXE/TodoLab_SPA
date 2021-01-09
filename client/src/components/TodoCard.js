@@ -7,7 +7,7 @@ export const TodoCard = ({ todo }) => {
     const message = useMessage()
     const {request} = useHttp()
     const auth = useContext(AuthContext)
-    const [todoo, setTodoo] = useState({todo})
+    const [todoo, setTodoo] = useState(todo)
     const [name, setName] = useState('')
     const [des, setDes] = useState('')
 
@@ -15,10 +15,6 @@ export const TodoCard = ({ todo }) => {
     useEffect(() => {
         window.M.updateTextFields()
     }, [])
-
-    useEffect(() => {
-
-    })
     
     const updateHandler = async event => {
             try {
@@ -41,7 +37,7 @@ export const TodoCard = ({ todo }) => {
   
   return (
       <div className="col s12 m7">
-        <h2>Ваша задача</h2>
+        <h3>Ваша задача</h3>
         <div className="card horizontal">
           <div className="card-stacked">
             <div className="card-content">
@@ -56,9 +52,9 @@ export const TodoCard = ({ todo }) => {
                 id="description" type="text" 
                 className="yellow-input" 
               />
-              <button onClick={updateHandler}>Изменить</button>
+              <button className="waves-effect waves-light btn-small" onClick={updateHandler}>Изменить</button>
               </div>
-              <h4>{todoo.name}</h4>
+              <h5>{todoo.name}</h5>
               <p>{todoo.description}</p>
         </div>
       </div>

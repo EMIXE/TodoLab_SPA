@@ -71,7 +71,7 @@ router.post('/delete', auth, async (req,res) => {
         todo.save()
         res.status(200).json({message: "Удалено"})
     } else {
-        res.status(403).json({message: "Вы не имеет права"})
+        res.status(403).json({message: "Вы не имеете права"})
     }
 })
 
