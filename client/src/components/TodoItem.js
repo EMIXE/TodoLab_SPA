@@ -1,13 +1,7 @@
-import React, {useContext, useEffect, useState, useCallback} from 'react'
-import {useHttp} from '../hooks/http.hook'
-import { AuthContext } from '../context/AuthContext'
+import React from 'react'
 import {Link} from 'react-router-dom'
 
 export const TodoItem = ({todo, index, deleteHandler})  => {
-    const {request} = useHttp()
-    const auth = useContext(AuthContext)
-
-    const [td, setTd] = useState(todo)
 
     const styles = {
         li: {
@@ -24,21 +18,17 @@ export const TodoItem = ({todo, index, deleteHandler})  => {
         }
       }
 
-
-      
-        
-
         return (
             <li style={styles.li}>
               <p>
                 <label>
                   <input type="checkbox" />
-                  <span><Link to={`/detail/${td._id}`}>{td.name}</Link></span>
+                  <span><Link to={`/detail/${todo._id}`}>{todo.name}</Link></span>
                 </label>
               </p>
                 &nbsp;
               <button className="waves-effect waves-light btn-small" 
-                onClick={() => deleteHandler(td._id)}>Удалить</button>
+                onClick={() => deleteHandler(todo._id)}>Удалить</button>
             </li>
           )
 }

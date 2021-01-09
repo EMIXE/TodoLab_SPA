@@ -1,15 +1,15 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { Loader } from '../components/Loader'
 import { AuthContext } from '../context/AuthContext'
-import {TodosList} from '../components/TodosList'
 import {useHttp} from '../hooks/http.hook'
 import {TodoItem} from '../components/TodoItem'
-import { response } from 'express'
+import { useMessage } from '../hooks/message.hook'
 
 export const TodosPage = () => {
     const [todos, setTodos] = useState([])
     const {loading, request} = useHttp()
     const {token} = useContext(AuthContext)
+    const message = useMessage()
 
     let fetchTodos = useCallback(async () => {
         try {
@@ -19,7 +19,6 @@ export const TodosPage = () => {
             setTodos(fetched)
         } catch(e) { }
     }, [token, request])
-
     
 
     async function deleteTodo(id){
@@ -27,7 +26,7 @@ export const TodosPage = () => {
             const data = await request('/api/todos/delete', 'POST', {id: id}, {
                 Authorization: `Bearer ${token}`
           }).then(fetchTodos())
-            
+            message(data.message)
         } catch(e) {}
         }
     

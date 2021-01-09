@@ -58,7 +58,7 @@ async (req,res) => {
         }
         const isMatch = await bcrypt.compare(password, user.password)
         if(!isMatch) {
-            return res.status(400).json({message: 'Неверный пароль, попроьуйте снова'})
+            return res.status(400).json({message: 'Неверный пароль, попробуйте снова'})
         }
         const token = jwt.sign(
             {userId: user.id},

@@ -51,7 +51,7 @@ router.post('/create', auth, async (req, res) => {
             name: name, description: ' ', completed: false, user: req.user.userId
         })
         await todo.save()
-        res.status(201).json(todo)
+        res.status(201).json({message: "Добавлено"})
 
     } catch(e) {
         res.status(500).json({message: "Что-то пошло не так, попробуйте снова "})
@@ -69,9 +69,9 @@ router.post('/delete', auth, async (req,res) => {
     if(todo.user === user) {
         const f = await Todo.remove({_id: id})
         todo.save()
-        res.end()
+        res.status(200).json({message: "Удалено"})
     } else {
-        res.status(403).json('Не имеете права')
+        res.status(403).json({message: "Вы не имеет права"})
     }
 })
 
@@ -85,28 +85,37 @@ router.get('/:id', auth, async (req,res) => {
 })
 
 router.post('/update', auth, async(req,res) => {
-    const name = req.body.name
-    const id = req.body.id
-    const description = req.body.description
-    
-    const data = {name: req.body.name, description: req.body.descrition}
+    try {
+        const id = req.body.id
 
-    const todo = await Todo.findById(id)
-    console.log(todo)
-    console.log(data)
-   
-    Todo.updateOne({_id: {$eq: id}}, data, (err) => {
-        if (err) {
-            console.log(err)
-        } else {
-            res.json(todo);
+        const name = req.body.newName
+        const description = req.body.newDes
+    
+        const data = {_id: id, name: name, description: description}
+
+        const todo = await Todo.findById(id)
+        console.log('Начальная тудушка', todo)
+        console.log('Новые данные', data)
+
+        if(data.name == '') {
+            return res.status(400).json({message: "Задача не может иметь пустое название"})
         }
-    })
-    todo.save()
 
-    const ntodo = await Todo.findById(id)
-    console.log(ntodo)
-    
+        Todo.updateOne({_id: {$eq: id}}, data, (err) => {
+            if (err) {
+                console.log(err)
+            } else {
+                //res.json(todo);
+            }
+        })
+        todo.save()
+
+        const ntodo = await Todo.findById(id)
+        console.log('Измененная тудушка', ntodo)
+        res.status(200).json({message: "Изменено"})
+    } catch(e) {
+        res.status(500).json({message: "Что-то пошло не так, попробуйте снова "})
+    }
 })
 
 module.exports = router

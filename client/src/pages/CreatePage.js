@@ -19,7 +19,7 @@ export const CreatePage = () => {
                 const data = await request('/api/todos/create', 'POST', {name: todo}, {
                 Authorization: `Bearer ${auth.token}`
               })
-                message('Добавлено')
+                message(data.message)
             } catch(e) {}
         }
     }
