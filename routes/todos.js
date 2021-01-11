@@ -37,18 +37,33 @@ router.get('/', auth, async (req,res) => {
 //         isUpdate: true
 //     })
 // })
-// router.get('/delete', auth, (req,res) => {
-//     console.log('delete get lool')
-// })
+
+// api/todos/completed
+router.post('/completed', auth, async (req,res) => {
+    try {
+        const id = req.body.id
+        const todo = await Todo.findById(id)
+        todo.completed = !todo.completed
+        await todo.save()
+        if(todo.completed) {
+            res.status(201).json({message: "Задача выполнена!"})
+        } else {
+            res.status(201).json({message: "Задача  НЕ выполнена!"})
+        }
+    } catch (e) {
+        res.status(500).json({message: "Что-то пошло не так, попробуйте снова "})
+    }
+})
 
 // api/todos/create
 router.post('/create', auth, async (req, res) => {
     try {
         const baseUrl = config.get('baseUrl')
-        const {name} = req.body
+        const name = req.body.name
+        const description = req.body.description
 
         const todo = new Todo({
-            name: name, description: ' ', completed: false, user: req.user.userId
+            name: name, description: description, completed: false, user: req.user.userId
         })
         await todo.save()
         res.status(201).json({message: "Добавлено"})

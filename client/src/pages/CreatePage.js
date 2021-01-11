@@ -1,10 +1,11 @@
 import React, {useContext, useEffect, useState} from 'react'
 import { AuthContext } from '../context/AuthContext'
+import { Loader } from '../components/Loader'
 import {useHttp} from '../hooks/http.hook'
 import { useMessage } from '../hooks/message.hook'
 
 export const CreatePage = () => {
-    const {request} = useHttp()
+    const {loading, request} = useHttp()
     const message = useMessage()
     const auth = useContext(AuthContext)
     const [name, setName] = useState('')
@@ -13,6 +14,10 @@ export const CreatePage = () => {
     useEffect(() => {
         window.M.updateTextFields()
     }, [])
+
+    if(loading) {
+        return <Loader />
+    }
     
     const createHandler = async event => {
             try {

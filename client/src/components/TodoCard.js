@@ -41,6 +41,8 @@ export const TodoCard = ({ todo }) => {
         <div className="card horizontal">
           <div className="card-stacked">
             <div className="card-content">
+              <h5>{todoo.name}</h5>
+              <p>{todoo.description}</p>
               <div className="input-field">
               <input placeholder="Имя"
                 onChange={nameChange}
@@ -54,8 +56,7 @@ export const TodoCard = ({ todo }) => {
               />
               <button className="waves-effect waves-light btn-small" onClick={updateHandler}>Изменить</button>
               </div>
-              <h5>{todoo.name}</h5>
-              <p>{todoo.description}</p>
+              
         </div>
       </div>
     </div>

@@ -21,11 +21,35 @@ export const TodosPage = () => {
     }, [token, request])
     
 
+    async function checkboxHandler(id){
+        try {
+            const data = await request('api/todos/completed', 'POST', {id: id}, {
+                Authorization: `Bearer ${token}`
+            })
+            setTodos(
+                todos.map(todo => {
+                  if (todo._id === id) {
+                    todo.completed = !todo.completed
+                  }
+                  return todo
+                })
+              )
+            message(data.message)
+        } catch (e) {
+            
+        }
+    }
+
     async function deleteTodo(id){
         try {
             const data = await request('/api/todos/delete', 'POST', {id: id}, {
                 Authorization: `Bearer ${token}`
-          }).then(fetchTodos())
+          })
+          setTodos(
+              todos.filter(todo => 
+                  todo._id !== id
+              )
+          )
             message(data.message)
         } catch(e) {}
         }
@@ -57,7 +81,7 @@ export const TodosPage = () => {
             <ul style={styles}>
             {todos.map((todo, index)=> { 
                 return(
-                    <TodoItem todo={todo} key={todo._id} index={index} deleteHandler={deleteTodo} />
+                    <TodoItem todo={todo} key={todo._id} index={index} deleteHandler={deleteTodo} completedChange={checkboxHandler} />
                 )})}
             </ul>
         </div>
