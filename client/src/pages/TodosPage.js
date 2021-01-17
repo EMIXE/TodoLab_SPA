@@ -10,22 +10,28 @@ export const TodosPage = () => {
     const {loading, request} = useHttp()
     const {token} = useContext(AuthContext)
     const [searchTerm, setSearchTerm] = useState("")
-    const [searchResults, setSearchResults] = React.useState(todos);
+    const [searchResults, setSearchResults] = React.useState([]);
     const message = useMessage()
-
-
-    let fetchTodos = useCallback(async () => {
-        try {
-            const fetched = await request('/api/todos', 'GET', null, {
-                Authorization: `Bearer ${token}`
-            })
-            setTodos(fetched)
-        } catch(e) { }
-    }, [token, request])
     
     useEffect(() => {
-        fetchTodos()
-    }, [fetchTodos])
+        const fetched = async ()=> {
+            try {
+                const res = await request('/api/todos', 'GET', null, {
+                    Authorization: `Bearer ${token}`
+                })
+                setTodos(res)
+                setSearchResults(res)
+            } catch(e) { }
+        };
+        fetched()
+    }, [])
+
+    useEffect(() => {
+        const results = searchResults.filter(res =>
+          res.name.toLowerCase().includes(searchTerm)
+        );
+        setTodos(results)
+      }, [searchTerm]);
 
     async function checkboxHandler(id){
         try {
@@ -70,25 +76,14 @@ export const TodosPage = () => {
         }
     }
 
-    React.useEffect(() => {
-        const results = todos.filter(todo =>
-          todo.name.toLowerCase().includes(searchTerm)
-        );
-        if(results.length===0) {
-            setSearchResults(todos);
-        } else {
-            setSearchResults(results);
-        }
-      }, [searchTerm]);
+    
 
 
     if(loading) {
         return <Loader />
     }
 
-    if(!todos.length) {
-        return <p className="center">Задач на данный момент нет!</p>
-    }   
+    
 
     const handleChange = event => {
         setSearchTerm(event.target.value);
@@ -98,8 +93,26 @@ export const TodosPage = () => {
         setSearchTerm("")
     }
 
+    if(!todos.length) {
+        return (
+            <div className="wrapper">
+            <div class="nav-wrapper">
+                <form>
+                    <div class="input-field">
+                    <input id="search" type="search" 
+                    placeholder="Search" value={searchTerm} onChange={handleChange}
+                     required />
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons" onClick={clearSearchInput}>clear</i>
+                    </div>
+                </form>
+            </div>
+            <p className="center">Задач на данный момент нет!</p>
+            </div>
+        )
+    }   
+
     return (
-        
         <div className="wrapper">
             <div class="nav-wrapper">
                 <form>
@@ -113,7 +126,7 @@ export const TodosPage = () => {
                 </form>
             </div>
             <ul style={styles}>
-                {searchResults.map((todo, index)=> { 
+                {todos.map((todo, index)=> { 
                     return(
                         <TodoItem todo={todo} key={todo._id} index={index} deleteHandler={deleteTodo} completedChange={checkboxHandler} />
                     )})}
