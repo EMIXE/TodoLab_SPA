@@ -9,7 +9,10 @@ export const TodosPage = () => {
     const [todos, setTodos] = useState([])
     const {loading, request} = useHttp()
     const {token} = useContext(AuthContext)
+    const [searchTerm, setSearchTerm] = useState("")
+    const [searchResults, setSearchResults] = React.useState(todos);
     const message = useMessage()
+
 
     let fetchTodos = useCallback(async () => {
         try {
@@ -20,6 +23,9 @@ export const TodosPage = () => {
         } catch(e) { }
     }, [token, request])
     
+    useEffect(() => {
+        fetchTodos()
+    }, [fetchTodos])
 
     async function checkboxHandler(id){
         try {
@@ -54,9 +60,7 @@ export const TodosPage = () => {
         } catch(e) {}
         }
     
-        useEffect(() => {
-            fetchTodos()
-        }, [fetchTodos])
+       
 
     const styles = {
         ul: {
@@ -66,6 +70,16 @@ export const TodosPage = () => {
         }
     }
 
+    React.useEffect(() => {
+        const results = todos.filter(todo =>
+          todo.name.toLowerCase().includes(searchTerm)
+        );
+        if(results.length===0) {
+            setSearchResults(todos);
+        } else {
+            setSearchResults(results);
+        }
+      }, [searchTerm]);
 
 
     if(loading) {
@@ -76,13 +90,33 @@ export const TodosPage = () => {
         return <p className="center">Задач на данный момент нет!</p>
     }   
 
+    const handleChange = event => {
+        setSearchTerm(event.target.value);
+      };
+
+    function clearSearchInput() {
+        setSearchTerm("")
+    }
+
     return (
+        
         <div className="wrapper">
+            <div class="nav-wrapper">
+                <form>
+                    <div class="input-field">
+                    <input id="search" type="search" 
+                    placeholder="Search" value={searchTerm} onChange={handleChange}
+                     required />
+                    <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                    <i class="material-icons" onClick={clearSearchInput}>clear</i>
+                    </div>
+                </form>
+            </div>
             <ul style={styles}>
-            {todos.map((todo, index)=> { 
-                return(
-                    <TodoItem todo={todo} key={todo._id} index={index} deleteHandler={deleteTodo} completedChange={checkboxHandler} />
-                )})}
+                {searchResults.map((todo, index)=> { 
+                    return(
+                        <TodoItem todo={todo} key={todo._id} index={index} deleteHandler={deleteTodo} completedChange={checkboxHandler} />
+                    )})}
             </ul>
         </div>
         

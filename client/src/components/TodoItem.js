@@ -3,8 +3,6 @@ import {Link} from 'react-router-dom'
 
 export const TodoItem = ({todo, index, deleteHandler, completedChange})  => {
 
-  
-
     function stylesWithBg() {
       let styles = {
         li: {
